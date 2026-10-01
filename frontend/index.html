@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f1e8">
+    <meta name="description" content="Thoughtful essentials for days outside. Shop durable trail goods made for the long way around.">
+    <title>Lowland Supply — Goods for the long way</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="announcement">Free shipping on orders over $75 <span aria-hidden="true">↗</span></div>
+    <header class="site-header">
+      <a class="wordmark" href="#top" aria-label="Lowland Supply home">LOWLAND<span>®</span></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#shop">Shop all</a>
+        <a href="#shop" data-nav-category="Packs">Packs</a>
+        <a href="#shop" data-nav-category="Field gear">Field gear</a>
+        <a href="#story">Our approach</a>
+      </nav>
+      <div class="header-actions">
+        <label class="search-box">
+          <span class="visually-hidden">Search products</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+          <input id="product-search" type="search" placeholder="Search" autocomplete="off">
+        </label>
+        <button class="bag-button" id="open-cart" type="button" aria-label="Open shopping bag">
+          Bag <span id="cart-count" class="bag-count">0</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot"></span> Built for outside since 2018</p>
+          <h1 id="hero-title">Take the<br>long way<span class="period">.</span></h1>
+          <div class="hero-bottom">
+            <p>Useful things for slower mornings, longer trails, and everything in between.</p>
+            <a class="text-link" href="#shop">Explore the collection <span aria-hidden="true">↘</span></a>
+          </div>
+          <span class="hero-index">01 / 04 — THE OPEN AIR EDIT</span>
+        </div>
+        <div class="hero-image" role="img" aria-label="A hiker looking over a wide mountain landscape">
+          <span class="image-note">FIELD NOTES NO. 014<br>WINDWARD RIDGE, WY</span>
+          <span class="image-stamp">GO<br>FAR</span>
+        </div>
+      </section>
+
+      <section class="shop-section" id="shop" aria-labelledby="shop-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">The good stuff</p>
+            <h2 id="shop-title">Made to get out there<span class="period">.</span></h2>
+          </div>
+          <p class="product-total" id="product-total" aria-live="polite"></p>
+        </div>
+        <div class="shop-controls">
+          <div class="category-list" role="group" aria-label="Filter products by category">
+            <button class="category-button is-active" type="button" data-category="All">All gear</button>
+            <button class="category-button" type="button" data-category="Packs">Packs</button>
+            <button class="category-button" type="button" data-category="Field gear">Field gear</button>
+            <button class="category-button" type="button" data-category="Apparel">Apparel</button>
+          </div>
+          <label class="sort-control">Sort by
+            <select id="sort-products" aria-label="Sort products">
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: low to high</option>
+              <option value="price-high">Price: high to low</option>
+              <option value="name">Name</option>
+            </select>
+          </label>
+        </div>
+        <div class="product-grid" id="product-grid" aria-live="polite"></div>
+        <p class="empty-results" id="empty-results" hidden>No gear found. Try another search.</p>
+      </section>
+
+      <section class="manifesto" id="story">
+        <p class="eyebrow">Less, but better</p>
+        <p>Good gear earns its place. We make fewer things, make them to last, and leave a little more room for the day ahead.</p>
+        <a class="text-link" href="#shop">Find your next favorite <span aria-hidden="true">↗</span></a>
+        <span class="manifesto-mark" aria-hidden="true">L.</span>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="wordmark" href="#top">LOWLAND<span>®</span></a>
+      <p>Good days start outside.</p>
+      <span>© 2026 Lowland Supply Co.</span>
+    </footer>
+
+    <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+    <aside class="cart-drawer" id="cart-drawer" aria-labelledby="cart-title" aria-hidden="true" inert>
+      <div class="drawer-header">
+        <div><p class="eyebrow">Your picks</p><h2 id="cart-title">The bag <span id="drawer-count">(0)</span></h2></div>
+        <button class="icon-button" id="close-cart" type="button" aria-label="Close shopping bag">×</button>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-empty" id="cart-empty"><span class="empty-sun" aria-hidden="true">✳</span><p>Your bag is taking the scenic route.</p><button class="text-link" id="continue-shopping" type="button">Keep exploring <span aria-hidden="true">↗</span></button></div>
+      <div class="cart-footer" id="cart-footer" hidden>
+        <p class="shipping-message" id="shipping-message"></p>
+        <div class="subtotal-row"><span>Subtotal</span><strong id="cart-subtotal">$0.00</strong></div>
+        <p class="tax-note">Shipping and taxes calculated at checkout.</p>
+        <button class="checkout-button" id="checkout-button" type="button">Continue to checkout <span aria-hidden="true">→</span></button>
+        <button class="continue-link" id="continue-shopping-filled" type="button">Keep looking</button>
+      </div>
+    </aside>
+
+    <dialog class="checkout-dialog" id="checkout-dialog" aria-labelledby="checkout-title">
+      <form id="checkout-form">
+        <div class="drawer-header">
+          <div><p class="eyebrow">Almost out the door</p><h2 id="checkout-title">Checkout</h2></div>
+          <button class="icon-button" id="close-checkout" type="button" aria-label="Close checkout">×</button>
+        </div>
+        <div class="checkout-summary" id="checkout-summary"></div>
+        <label class="form-field">Email address<input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+        <div class="form-row">
+          <label class="form-field">First name<input name="firstName" required autocomplete="given-name"></label>
+          <label class="form-field">Last name<input name="lastName" required autocomplete="family-name"></label>
+        </div>
+        <label class="form-field">Shipping address<input name="address" required autocomplete="street-address" placeholder="Street and number"></label>
+        <div class="form-row">
+          <label class="form-field">City<input name="city" required autocomplete="address-level2"></label>
+          <label class="form-field">Postal code<input name="postal" required autocomplete="postal-code"></label>
+        </div>
+        <p class="demo-note">Demo checkout. No payment will be collected.</p>
+        <button class="checkout-button" type="submit">Place demo order <span aria-hidden="true">→</span></button>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
