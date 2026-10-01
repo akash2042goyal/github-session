@@ -1,85 +1,5 @@
-const products = [
-  {
-    id: "daybreak-pack",
-    name: "Daybreak Pack",
-    category: "Packs",
-    detail: "18L recycled nylon · Moss",
-    price: 88,
-    badge: "Best seller",
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=82",
-    alt: "Olive hiking backpack resting outdoors"
-  },
-  {
-    id: "trail-flask",
-    name: "Trail Flask",
-    category: "Field gear",
-    detail: "750ml stainless steel · Clay",
-    price: 34,
-    badge: "Made to last",
-    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=82",
-    alt: "Reusable water bottle for a day on the trail"
-  },
-  {
-    id: "switchback-fleece",
-    name: "Switchback Fleece",
-    category: "Apparel",
-    detail: "Recycled pile · Fern",
-    price: 112,
-    badge: "New color",
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=900&q=82",
-    alt: "Warm outdoor jacket in a muted green tone"
-  },
-  {
-    id: "camp-mug",
-    name: "Camp Mug Set",
-    category: "Field gear",
-    detail: "Enamel steel · Set of two",
-    price: 28,
-    badge: "Good company",
-    image: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=900&q=82",
-    alt: "Simple camp cup ready for a fireside coffee"
-  },
-  {
-    id: "ridge-cap",
-    name: "Ridge Cap",
-    category: "Apparel",
-    detail: "Organic cotton · Rust",
-    price: 38,
-    badge: "Easy favorite",
-    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=900&q=82",
-    alt: "Everyday cotton cap in a warm earth tone"
-  },
-  {
-    id: "field-blanket",
-    name: "Field Blanket",
-    category: "Field gear",
-    detail: "Recycled wool blend · Check",
-    price: 96,
-    badge: "A little extra",
-    image: "https://images.unsplash.com/photo-1600369671236-e74521d4b6ad?auto=format&fit=crop&w=900&q=82",
-    alt: "Folded outdoor blanket for a picnic or campsite"
-  },
-  {
-    id: "sidepath-tote",
-    name: "Sidepath Tote",
-    category: "Packs",
-    detail: "Heavy canvas · Natural",
-    price: 42,
-    badge: "Everyday carry",
-    image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=900&q=82",
-    alt: "Durable canvas carry bag"
-  },
-  {
-    id: "pocket-light",
-    name: "Pocket Light",
-    category: "Field gear",
-    detail: "USB-C rechargeable · Amber",
-    price: 46,
-    badge: "Small but mighty",
-    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=900&q=82",
-    alt: "Compact warm light for evenings outdoors"
-  }
-];
+const API_URL = "http://localhost:3000";
+let products = [];
 
 const FREE_SHIPPING_THRESHOLD = 75;
 const CART_STORAGE_KEY = "lowland-cart-v1";
@@ -95,7 +15,7 @@ const toast = document.querySelector("#toast");
 
 let selectedCategory = "All";
 let toastTimer;
-let cart = loadCart();
+let cart = [];
 
 function loadCart() {
   try {
@@ -265,22 +185,48 @@ document.querySelector("#close-checkout").addEventListener("click", () => checko
 checkoutDialog.addEventListener("click", (event) => {
   if (event.target === checkoutDialog) checkoutDialog.close();
 });
-document.querySelector("#checkout-form").addEventListener("submit", (event) => {
+document.querySelector("#checkout-form").addEventListener("submit", async (event) => {
   event.preventDefault();
-  if (!event.currentTarget.reportValidity()) return;
-  const orderNumber = `LL-${Math.floor(100000 + Math.random() * 900000)}`;
-  cart = [];
-  saveCart();
-  renderCart();
-  checkoutDialog.close();
-  setCartOpen(false);
-  event.currentTarget.reset();
-  showToast(`Order ${orderNumber} placed. Thanks for heading out with us.`);
-});
+  const form = event.currentTarget;
+  if (!form.reportValidity()) return;
+
+  try {
+    const response = await fetch(`${API_URL}/api/orders`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: cart, shipping: Object.fromEntries(new FormData(form)) })
+    });
+    if (!response.ok) throw new Error("Order failed");
+    const data = await response.json();
+
+    cart = [];
+    saveCart();
+    renderCart();
+    checkoutDialog.close();
+    setCartOpen(false);
+    form.reset();
+    showToast(`Order ${data.orderId} placed. Thanks for heading out with us.`);
+  } catch (error) {
+    showToast("Could not place the order. Is the backend running?");
+  }
+   });
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && cartDrawer.classList.contains("is-open") && !checkoutDialog.open) setCartOpen(false);
 });
 
-renderProducts();
-renderCart();
+async function init() {
+  try {
+    const response = await fetch(`${API_URL}/api/products`);
+    if (!response.ok) throw new Error("Bad response");
+    products = await response.json();
+  } catch (error) {
+    productGrid.innerHTML = "<p>Could not load products. Is the backend running?</p>";
+    return;
+  }
+  cart = loadCart();
+  renderProducts();
+  renderCart();
+}
+
+init();
