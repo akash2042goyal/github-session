@@ -1,16 +1,14 @@
 # Lowland Supply
 
-A responsive, static ecommerce storefront demo.
+A responsive ecommerce storefront demo with a Node/Express backend.
 
 ## Run
 
-Open [`frontend/index.html`](frontend/index.html) in a browser. There is no build step or package installation.
+1. Start the backend:
+   cd backend
+   npm install
+   node server.js
+2. Open frontend/index.html in a browser.
 
-## Included
-
-- Product catalog with category filters, search, and sorting
-- Shopping bag with quantity controls, subtotal, and free-shipping threshold
-- Cart saved in browser local storage
-- Checkout form with required-field validation and a simulated order confirmation
-
-Checkout is a front-end demo only. It does not send orders to a server or collect payment. Product photography and web fonts load from external providers and need an internet connection.
+The backend serves the product list at http://localhost:3000/api/products
+and saves orders to backend/orders.json (not committed).
